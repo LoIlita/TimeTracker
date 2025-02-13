@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:TimeTracker.UI.ViewModels"
+             xmlns:models="clr-namespace:TimeTracker.Application.DTOs;assembly=TimeTracker.Application"
+             x:Class="TimeTracker.UI.Views.SessionHistoryView"
+             x:DataType="viewmodels:SessionHistoryViewModel"
+             Title="Historia sesji">
+
+    <Grid RowDefinitions="Auto,*" Padding="20">
+        <!-- Filtrowanie -->
+        <Frame Grid.Row="0" Margin="0,0,0,20">
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                <Label Text="Filtruj po hashtagu:" 
+                       VerticalOptions="Center"/>
+                <Picker Grid.Column="1"
+                        ItemsSource="{Binding AvailableHashtags}"
+                        SelectedItem="{Binding SelectedHashtag}"
+                        Title="Wszystkie hashtagi"
+                        Margin="10,0">
+                </Picker>
+                <Button Grid.Column="2"
+                        Text="Wyczyść"
+                        Command="{Binding ClearFilterCommand}"
+                        Margin="0,0,10,0"/>
+                <Button Grid.Column="3"
+                        Text="+"
+                        Command="{Binding AddHashtagCommand}"
+                        WidthRequest="40"
+                        HeightRequest="40"
+                        CornerRadius="20"
+                        Padding="0"
+                        FontSize="20"
+                        FontAttributes="Bold"/>
+            </Grid>
+        </Frame>
+
+        <!-- Lista sesji -->
+        <RefreshView Grid.Row="1" 
+                    Command="{Binding RefreshHistoryCommand}"
+                    IsRefreshing="{Binding IsLoading}">
+            <ScrollView>
+                <CollectionView ItemsSource="{Binding Sessions}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="viewmodels:WorkTrackerViewModel+SessionGroup">
+                            <VerticalStackLayout Spacing="10" Padding="0,10">
+                                <Label Text="{Binding Date, StringFormat='{0:d MMMM yyyy}'}"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="#512BD4"/>
+                                
+                                <CollectionView ItemsSource="{Binding}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate x:DataType="models:WorkSessionDto">
+                                            <Frame Margin="0,5" Padding="15">
+                                                <Grid ColumnDefinitions="*,Auto">
+                                                    <VerticalStackLayout Grid.Column="0" 
+                                                                       Spacing="5">
+                                                        <Label Text="{Binding Description}" 
+                                                               FontAttributes="Bold"
+                                                               FontSize="16" />
+                                                        
+                                                        <!-- Hashtagi -->
+                                                        <FlexLayout BindableLayout.ItemsSource="{Binding HashtagList}"
+                                                                  Wrap="Wrap"
+                                                                  Margin="0,5">
+                                                            <BindableLayout.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <Border Margin="0,2,4,2"
+                                                                            StrokeShape="RoundRectangle 4"
+                                                                            BackgroundColor="#e0e0e0"
+                                                                            Padding="6,2">
+                                                                        <Border.GestureRecognizers>
+                                                                            <TapGestureRecognizer 
+                                                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SessionHistoryViewModel}}, Path=SelectHashtagCommand}"
+                                                                                CommandParameter="{Binding}"/>
+                                                                        </Border.GestureRecognizers>
+                                                                        <Label Text="{Binding}"
+                                                                               TextColor="#666666"
+                                                                               FontSize="12"/>
+                                                                    </Border>
+                                                                </DataTemplate>
+                                                            </BindableLayout.ItemTemplate>
+                                                        </FlexLayout>
+                                                        
+                                                        <HorizontalStackLayout Spacing="10">
+                                                            <Label Text="{Binding StartTime, StringFormat='Start: {0:HH:mm}'}"
+                                                                   TextColor="Gray" />
+                                                            <Label Text="{Binding EndTime, StringFormat='Koniec: {0:HH:mm}'}" 
+                                                                   IsVisible="{Binding EndTime, Converter={StaticResource NotNullConverter}}"
+                                                                   TextColor="Gray" />
+                                                        </HorizontalStackLayout>
+                                                    </VerticalStackLayout>
+                                                    
+                                                    <Label Grid.Column="1" 
+                                                           Text="{Binding Duration, StringFormat='{0:hh\\:mm\\:ss}'}"
+                                                           VerticalOptions="Center"
+                                                           FontSize="20"
+                                                           FontAttributes="Bold" />
+                                                </Grid>
+                                            </Frame>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout HorizontalOptions="Center" 
+                                           VerticalOptions="Center">
+                            <Label Text="Brak sesji"
+                                   FontSize="20"
+                                   TextColor="Gray"
+                                   HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+            </ScrollView>
+        </RefreshView>
+
+        <!-- Wskaźnik ładowania -->
+        <ActivityIndicator Grid.Row="1"
+                          IsRunning="{Binding IsLoading}"
+                          IsVisible="{Binding IsLoading}"
+                          HorizontalOptions="Center"
+                          VerticalOptions="Center"/>
+    </Grid>
+</ContentPage> 

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:TimeTracker.UI.ViewModels"
+             xmlns:converters="clr-namespace:TimeTracker.UI.Converters"
+             xmlns:models="clr-namespace:TimeTracker.Application.DTOs;assembly=TimeTracker.Application"
+             x:Class="TimeTracker.UI.Views.MainPage"
+             x:DataType="viewmodels:WorkTrackerViewModel">
+
+    <ContentPage.Resources>
+        <converters:NotNullConverter x:Key="NotNullConverter"/>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- Górny pasek z przyciskami -->
+        <HorizontalStackLayout Grid.Row="0" Spacing="10" Margin="10">
+            <Button Text="Historia" Command="{Binding ShowHistoryCommand}"/>
+        </HorizontalStackLayout>
+
+        <!-- Główna zawartość -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="25" Padding="30,0" VerticalOptions="Start">
+
+                <!-- Sekcja timera -->
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Czas trwania:"
+                           SemanticProperties.HeadingLevel="Level1"
+                           FontSize="32"
+                           HorizontalOptions="Center" />
+
+                    <Label Text="{Binding TimerDisplay}"
+                           SemanticProperties.HeadingLevel="Level2"
+                           FontSize="48"
+                           HorizontalOptions="Center" />
+
+                    <!-- Przyciski kontroli timera -->
+                    <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <!-- Przycisk Start/Stop -->
+                        <Button Text="{Binding StartButtonText}"
+                                Command="{Binding StartCommand}"
+                                IsEnabled="{Binding CanStart}"
+                                BackgroundColor="{Binding StartButtonColor}"
+                                SemanticProperties.Hint="Rozpoczyna nową sesję pracy"
+                                IsVisible="{Binding CanStart}"/>
+
+                        <!-- Przyciski widoczne tylko podczas aktywnej sesji -->
+                        <VerticalStackLayout IsVisible="{Binding IsSessionActive}">
+                            <Button Text="{Binding PauseButtonText}"
+                                    Command="{Binding TogglePauseCommand}"
+                                    IsEnabled="{Binding CanPause}"
+                                    SemanticProperties.Hint="Wstrzymuje lub wznawia aktualną sesję"/>
+
+                            <Button Text="Zakończ"
+                                    Command="{Binding StopSessionCommand}"
+                                    IsEnabled="{Binding CanStop}"
+                                    BackgroundColor="Red"
+                                    SemanticProperties.Hint="Kończy aktualną sesję"
+                                    Margin="0,10,0,0"/>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+
+                <!-- Formularz opisu sesji -->
+                <VerticalStackLayout Spacing="10" IsVisible="{Binding CanEditDescription}">
+                    <Label Text="Opis sesji:"
+                           SemanticProperties.HeadingLevel="Level2"/>
+
+                    <!-- Pole opisu -->
+                    <Entry Text="{Binding Description}"
+                           Placeholder="Opis sesji"
+                           IsEnabled="{Binding CanEditDescription}"
+                           Margin="0,0,0,10"/>
+
+                    <!-- Sekcja hashtagów -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Hashtagi:" />
+                        <HorizontalStackLayout>
+                            <Picker ItemsSource="{Binding AvailableHashtags}"
+                                    SelectedItem="{Binding SelectedHashtag}"
+                                    Title="Wybierz hashtag"
+                                    WidthRequest="200"
+                                    Margin="0,0,10,0"/>
+                            <Button Text="+" 
+                                    Command="{Binding AddHashtagCommand}"
+                                    WidthRequest="40"
+                                    HeightRequest="40"/>
+                        </HorizontalStackLayout>
+                        
+                        <!-- Wyświetlanie aktualnie wybranych hashtagów -->
+                        <FlexLayout BindableLayout.ItemsSource="{Binding HashtagList}"
+                                  Wrap="Wrap"
+                                  Margin="0,5">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Margin="0,2,4,2"
+                                            StrokeShape="RoundRectangle 4"
+                                            BackgroundColor="#e0e0e0"
+                                            Padding="6,2">
+                                        <Label Text="{Binding}"
+                                               TextColor="#666666"
+                                               FontSize="12"/>
+                                    </Border>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </FlexLayout>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+
+</ContentPage> 

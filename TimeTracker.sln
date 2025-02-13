@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TimeTracker", "TimeTracker", "{8D6AB0F8-A935-4176-B222-3DB536F0A46A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Domain", "TimeTracker\TimeTracker.Domain\TimeTracker.Domain.csproj", "{5B6B1F19-E42C-4A52-B4BA-369B5E2A48B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Application", "TimeTracker\TimeTracker.Application\TimeTracker.Application.csproj", "{259A65AA-928B-4549-A100-AAF85C5676E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Infrastructure", "TimeTracker\TimeTracker.Infrastructure\TimeTracker.Infrastructure.csproj", "{B673A89D-DEFA-454D-A65A-D65A7D6F654E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Tests", "TimeTracker\TimeTracker.Tests\TimeTracker.Tests.csproj", "{9FB7F5E3-EDB5-4A53-92EF-A1F304C70ACD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.UI", "TimeTracker\TimeTracker.UI\TimeTracker.UI.csproj", "{819BC212-9605-4CD7-9A48-5FF362E39FFF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5B6B1F19-E42C-4A52-B4BA-369B5E2A48B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B6B1F19-E42C-4A52-B4BA-369B5E2A48B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B6B1F19-E42C-4A52-B4BA-369B5E2A48B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B6B1F19-E42C-4A52-B4BA-369B5E2A48B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{259A65AA-928B-4549-A100-AAF85C5676E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{259A65AA-928B-4549-A100-AAF85C5676E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{259A65AA-928B-4549-A100-AAF85C5676E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{259A65AA-928B-4549-A100-AAF85C5676E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B673A89D-DEFA-454D-A65A-D65A7D6F654E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B673A89D-DEFA-454D-A65A-D65A7D6F654E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B673A89D-DEFA-454D-A65A-D65A7D6F654E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B673A89D-DEFA-454D-A65A-D65A7D6F654E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FB7F5E3-EDB5-4A53-92EF-A1F304C70ACD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FB7F5E3-EDB5-4A53-92EF-A1F304C70ACD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FB7F5E3-EDB5-4A53-92EF-A1F304C70ACD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FB7F5E3-EDB5-4A53-92EF-A1F304C70ACD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{819BC212-9605-4CD7-9A48-5FF362E39FFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{819BC212-9605-4CD7-9A48-5FF362E39FFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{819BC212-9605-4CD7-9A48-5FF362E39FFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{819BC212-9605-4CD7-9A48-5FF362E39FFF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5B6B1F19-E42C-4A52-B4BA-369B5E2A48B5} = {8D6AB0F8-A935-4176-B222-3DB536F0A46A}
+		{259A65AA-928B-4549-A100-AAF85C5676E2} = {8D6AB0F8-A935-4176-B222-3DB536F0A46A}
+		{B673A89D-DEFA-454D-A65A-D65A7D6F654E} = {8D6AB0F8-A935-4176-B222-3DB536F0A46A}
+		{9FB7F5E3-EDB5-4A53-92EF-A1F304C70ACD} = {8D6AB0F8-A935-4176-B222-3DB536F0A46A}
+		{819BC212-9605-4CD7-9A48-5FF362E39FFF} = {8D6AB0F8-A935-4176-B222-3DB536F0A46A}
+	EndGlobalSection
+EndGlobal
