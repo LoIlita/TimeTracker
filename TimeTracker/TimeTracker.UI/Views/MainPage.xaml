@@ -65,9 +65,6 @@
 
                 <!-- Formularz opisu sesji -->
                 <VerticalStackLayout Spacing="10" IsVisible="{Binding CanEditDescription}">
-                    <Label Text="Opis sesji:"
-                           SemanticProperties.HeadingLevel="Level2"/>
-
                     <!-- Pole opisu -->
                     <Entry Text="{Binding Description}"
                            Placeholder="Opis sesji"
@@ -76,7 +73,6 @@
 
                     <!-- Sekcja hashtagów -->
                     <VerticalStackLayout Spacing="5">
-                        <Label Text="Hashtagi:" />
                         <HorizontalStackLayout>
                             <Picker ItemsSource="{Binding AvailableHashtags}"
                                     SelectedItem="{Binding SelectedHashtag}"
@@ -108,15 +104,6 @@
                         </FlexLayout>
                     </VerticalStackLayout>
                 </VerticalStackLayout>
-
-                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                    <Label Text="Czas pracy:" TextColor="{StaticResource TextSecondary}" />
-                    <Label Grid.Column="1" 
-                           Grid.RowSpan="2"
-                           Text="{Binding ElapsedTime, StringFormat='{0:hh\\:mm\\:ss}'}" 
-                           TextColor="{StaticResource White}"
-                           VerticalOptions="Center"/>
-                </HorizontalStackLayout>
 
             </VerticalStackLayout>
         </ScrollView>
