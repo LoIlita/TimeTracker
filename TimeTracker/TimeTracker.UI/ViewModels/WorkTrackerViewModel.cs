@@ -561,4 +561,18 @@ public partial class WorkTrackerViewModel : ObservableObject, IDisposable
             await _dialogService.ShowErrorAsync("Błąd", "Nie udało się dodać hashtagu");
         }
     }
+
+    [RelayCommand]
+    private async Task ShowStatistics()
+    {
+        try
+        {
+            await Shell.Current.GoToAsync("statistics");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Błąd podczas przechodzenia do widoku statystyk");
+            await ShowAlertAsync("Błąd", "Nie udało się otworzyć statystyk");
+        }
+    }
 }

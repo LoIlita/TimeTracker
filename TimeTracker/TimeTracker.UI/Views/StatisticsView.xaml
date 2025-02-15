@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:TimeTracker.UI.ViewModels"
+             x:Class="TimeTracker.UI.Views.StatisticsView"
+             x:DataType="viewmodels:StatisticsViewModel"
+             Title="Statystyki">
+
+    <Grid RowDefinitions="Auto,*" Padding="20">
+        <!-- Filtrowanie -->
+        <Frame Grid.Row="0" Margin="0,0,0,20">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <Label Text="Wybierz hashtag:" 
+                       VerticalOptions="Center"/>
+                <Picker Grid.Column="1"
+                        ItemsSource="{Binding AvailableHashtags}"
+                        SelectedItem="{Binding SelectedHashtag}"
+                        Title="Wszystkie hashtagi"
+                        Margin="10,0"/>
+                <Button Grid.Column="2"
+                        Text="Zresetuj"
+                        Command="{Binding ResetStatisticsCommand}"
+                        Margin="10,0,0,0"/>
+            </Grid>
+        </Frame>
+
+        <!-- Statystyki -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="20">
+                <!-- Podstawowe statystyki -->
+                <Frame>
+                    <VerticalStackLayout Spacing="10">
+                        <!-- Nagłówek z przyciskiem zwijania -->
+                        <Grid ColumnDefinitions="Auto,*">
+                            <Button Text="{Binding BasicStatisticsIcon}"
+                                    Command="{Binding ToggleBasicStatisticsCommand}"
+                                    BackgroundColor="Transparent"
+                                    TextColor="{StaticResource Primary}"
+                                    FontSize="18"
+                                    Padding="5"
+                                    WidthRequest="40"
+                                    HeightRequest="40"
+                                    VerticalOptions="Center"/>
+                            <Label Grid.Column="1"
+                                   Text="Podstawowe statystyki" 
+                                   FontSize="18" 
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                        
+                        <!-- Zawartość sekcji -->
+                        <Grid IsVisible="{Binding IsBasicStatisticsExpanded}"
+                              ColumnDefinitions="*,*" 
+                              RowDefinitions="Auto,Auto,Auto" 
+                              ColumnSpacing="15" 
+                              RowSpacing="10">
+                            <!-- Liczba sesji -->
+                            <Frame Grid.Row="0" Grid.Column="0" BackgroundColor="#f0f0f0">
+                                <VerticalStackLayout>
+                                    <Label Text="Liczba sesji" 
+                                           FontSize="14" 
+                                           TextColor="{StaticResource Gray600}"/>
+                                    <Label Text="{Binding TotalSessions}" 
+                                           FontSize="24" 
+                                           FontAttributes="Bold"/>
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <!-- Całkowity czas -->
+                            <Frame Grid.Row="0" Grid.Column="1" BackgroundColor="#f0f0f0">
+                                <VerticalStackLayout>
+                                    <Label Text="Całkowity czas" 
+                                           FontSize="14" 
+                                           TextColor="{StaticResource Gray600}"/>
+                                    <Label Text="{Binding TotalTime}" 
+                                           FontSize="24" 
+                                           FontAttributes="Bold"/>
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <!-- Średni czas sesji -->
+                            <Frame Grid.Row="1" Grid.Column="0" BackgroundColor="#f0f0f0">
+                                <VerticalStackLayout>
+                                    <Label Text="Średni czas sesji" 
+                                           FontSize="14" 
+                                           TextColor="{StaticResource Gray600}"/>
+                                    <Label Text="{Binding AverageSessionTime}" 
+                                           FontSize="24" 
+                                           FontAttributes="Bold"/>
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <!-- Najdłuższa sesja -->
+                            <Frame Grid.Row="1" Grid.Column="1" BackgroundColor="#f0f0f0">
+                                <VerticalStackLayout>
+                                    <Label Text="Najdłuższa sesja" 
+                                           FontSize="14" 
+                                           TextColor="{StaticResource Gray600}"/>
+                                    <Label Text="{Binding LongestSessionTime}" 
+                                           FontSize="24" 
+                                           FontAttributes="Bold"/>
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <!-- Sesje dzisiaj -->
+                            <Frame Grid.Row="2" Grid.Column="0" BackgroundColor="#f0f0f0">
+                                <VerticalStackLayout>
+                                    <Label Text="Sesje dzisiaj" 
+                                           FontSize="14" 
+                                           TextColor="{StaticResource Gray600}"/>
+                                    <Label Text="{Binding TodaySessions}" 
+                                           FontSize="24" 
+                                           FontAttributes="Bold"/>
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <!-- Czas dzisiaj -->
+                            <Frame Grid.Row="2" Grid.Column="1" BackgroundColor="#f0f0f0">
+                                <VerticalStackLayout>
+                                    <Label Text="Czas dzisiaj" 
+                                           FontSize="14" 
+                                           TextColor="{StaticResource Gray600}"/>
+                                    <Label Text="{Binding TodayTime}" 
+                                           FontSize="24" 
+                                           FontAttributes="Bold"/>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Statystyki czasowe -->
+                <Frame>
+                    <VerticalStackLayout Spacing="10">
+                        <!-- Nagłówek z przyciskiem zwijania -->
+                        <Grid ColumnDefinitions="Auto,*">
+                            <Button Text="{Binding TimeStatisticsIcon}"
+                                    Command="{Binding ToggleTimeStatisticsCommand}"
+                                    BackgroundColor="Transparent"
+                                    TextColor="{StaticResource Primary}"
+                                    FontSize="18"
+                                    Padding="5"
+                                    WidthRequest="40"
+                                    HeightRequest="40"
+                                    VerticalOptions="Center"/>
+                            <Label Grid.Column="1"
+                                   Text="Statystyki czasowe" 
+                                   FontSize="18" 
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                        
+                        <!-- Zawartość sekcji -->
+                        <Grid IsVisible="{Binding IsTimeStatisticsExpanded}"
+                              ColumnDefinitions="*,*" 
+                              RowDefinitions="Auto,Auto" 
+                              ColumnSpacing="15" 
+                              RowSpacing="10">
+                            <!-- Ten tydzień -->
+                            <Frame Grid.Row="0" Grid.Column="0" BackgroundColor="#f0f0f0">
+                                <VerticalStackLayout>
+                                    <Label Text="Ten tydzień" 
+                                           FontSize="14" 
+                                           TextColor="{StaticResource Gray600}"/>
+                                    <Label Text="{Binding ThisWeekSessions, StringFormat='{0} sesji'}" 
+                                           FontSize="16" 
+                                           FontAttributes="Bold"/>
+                                    <Label Text="{Binding ThisWeekTime}" 
+                                           FontSize="16"/>
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <!-- Ten miesiąc -->
+                            <Frame Grid.Row="0" Grid.Column="1" BackgroundColor="#f0f0f0">
+                                <VerticalStackLayout>
+                                    <Label Text="Ten miesiąc" 
+                                           FontSize="14" 
+                                           TextColor="{StaticResource Gray600}"/>
+                                    <Label Text="{Binding ThisMonthSessions, StringFormat='{0} sesji'}" 
+                                           FontSize="16" 
+                                           FontAttributes="Bold"/>
+                                    <Label Text="{Binding ThisMonthTime}" 
+                                           FontSize="16"/>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Statystyki aktywności -->
+                <Frame>
+                    <VerticalStackLayout Spacing="10">
+                        <!-- Nagłówek z przyciskiem zwijania -->
+                        <Grid ColumnDefinitions="Auto,*">
+                            <Button Text="{Binding ActivityStatisticsIcon}"
+                                    Command="{Binding ToggleActivityStatisticsCommand}"
+                                    BackgroundColor="Transparent"
+                                    TextColor="{StaticResource Primary}"
+                                    FontSize="18"
+                                    Padding="5"
+                                    WidthRequest="40"
+                                    HeightRequest="40"
+                                    VerticalOptions="Center"/>
+                            <Label Grid.Column="1"
+                                   Text="Analiza aktywności" 
+                                   FontSize="18" 
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                        
+                        <!-- Zawartość sekcji -->
+                        <Grid IsVisible="{Binding IsActivityStatisticsExpanded}"
+                              RowDefinitions="Auto,Auto,Auto" 
+                              RowSpacing="10">
+                            <!-- Najbardziej aktywny dzień -->
+                            <Frame Grid.Row="0" BackgroundColor="#f0f0f0">
+                                <VerticalStackLayout>
+                                    <Label Text="Najbardziej aktywny dzień" 
+                                           FontSize="14" 
+                                           TextColor="{StaticResource Gray600}"/>
+                                    <Label Text="{Binding MostActiveDay}" 
+                                           FontSize="16" 
+                                           FontAttributes="Bold"/>
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <!-- Najbardziej aktywna pora dnia -->
+                            <Frame Grid.Row="1" BackgroundColor="#f0f0f0">
+                                <VerticalStackLayout>
+                                    <Label Text="Najbardziej aktywna pora dnia" 
+                                           FontSize="14" 
+                                           TextColor="{StaticResource Gray600}"/>
+                                    <Label Text="{Binding MostActiveTimeOfDay}" 
+                                           FontSize="16" 
+                                           FontAttributes="Bold"/>
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <!-- Najczęściej używany hashtag -->
+                            <Frame Grid.Row="2" BackgroundColor="#f0f0f0">
+                                <VerticalStackLayout>
+                                    <Label Text="Najczęściej używany hashtag" 
+                                           FontSize="14" 
+                                           TextColor="{StaticResource Gray600}"/>
+                                    <Label Text="{Binding MostUsedHashtag}" 
+                                           FontSize="16" 
+                                           FontAttributes="Bold"/>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Przycisk odświeżania -->
+                <Button Text="Odśwież statystyki"
+                        Command="{Binding RefreshStatisticsCommand}"
+                        HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Wskaźnik ładowania -->
+        <ActivityIndicator Grid.Row="1"
+                          IsRunning="{Binding IsLoading}"
+                          IsVisible="{Binding IsLoading}"
+                          HorizontalOptions="Center"
+                          VerticalOptions="Center"/>
+    </Grid>
+
+</ContentPage> 

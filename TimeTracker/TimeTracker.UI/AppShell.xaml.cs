@@ -21,6 +21,7 @@ public partial class AppShell : Shell
             
             // Rejestracja tras nawigacyjnych
             Routing.RegisterRoute("sessionhistory", typeof(SessionHistoryView));
+            Routing.RegisterRoute("statistics", typeof(StatisticsView));
             
             _logger.LogInformation("Trasy nawigacyjne zarejestrowane");
         }

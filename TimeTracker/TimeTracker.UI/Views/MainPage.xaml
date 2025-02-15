@@ -15,6 +15,7 @@
         <!-- Górny pasek z przyciskami -->
         <HorizontalStackLayout Grid.Row="0" Spacing="10" Margin="10">
             <Button Text="Historia" Command="{Binding ShowHistoryCommand}"/>
+            <Button Text="Statystyki" Command="{Binding ShowStatisticsCommand}"/>
         </HorizontalStackLayout>
 
         <!-- Główna zawartość -->
@@ -26,12 +27,14 @@
                     <Label Text="Czas trwania:"
                            SemanticProperties.HeadingLevel="Level1"
                            FontSize="32"
-                           HorizontalOptions="Center" />
+                           HorizontalOptions="Center"
+                           TextColor="{StaticResource TextSecondary}" />
 
                     <Label Text="{Binding TimerDisplay}"
                            SemanticProperties.HeadingLevel="Level2"
                            FontSize="48"
-                           HorizontalOptions="Center" />
+                           HorizontalOptions="Center"
+                           TextColor="{StaticResource White}" />
 
                     <!-- Przyciski kontroli timera -->
                     <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
@@ -105,6 +108,15 @@
                         </FlexLayout>
                     </VerticalStackLayout>
                 </VerticalStackLayout>
+
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Label Text="Czas pracy:" TextColor="{StaticResource TextSecondary}" />
+                    <Label Grid.Column="1" 
+                           Grid.RowSpan="2"
+                           Text="{Binding ElapsedTime, StringFormat='{0:hh\\:mm\\:ss}'}" 
+                           TextColor="{StaticResource White}"
+                           VerticalOptions="Center"/>
+                </HorizontalStackLayout>
 
             </VerticalStackLayout>
         </ScrollView>

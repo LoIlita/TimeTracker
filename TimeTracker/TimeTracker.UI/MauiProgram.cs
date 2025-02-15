@@ -110,6 +110,10 @@ public static class MauiProgram
 			builder.Services.AddTransient<SessionHistoryView>();
 			builder.Services.AddTransient<SessionHistoryViewModel>();
 
+			// Rejestracja komponentów dla statystyk
+			builder.Services.AddTransient<StatisticsView>();
+			builder.Services.AddTransient<StatisticsViewModel>();
+
 			// Serwisy aplikacyjne
 			builder.Services.AddScoped<IWorkSessionService, WorkSessionService>();
 			builder.Services.AddScoped<IWorkSessionReader>(sp => sp.GetRequiredService<IWorkSessionService>());
