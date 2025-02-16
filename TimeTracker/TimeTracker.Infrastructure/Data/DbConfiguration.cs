@@ -69,4 +69,81 @@ public static class DbConfiguration
             throw;
         }
     }
+
+    public static async Task CreateBackupAsync(string dbPath)
+    {
+        try
+        {
+            if (!File.Exists(dbPath))
+            {
+                throw new FileNotFoundException("Nie znaleziono pliku bazy danych", dbPath);
+            }
+
+            var backupDirectory = Path.Combine(
+                Path.GetDirectoryName(dbPath)!,
+                "Backups"
+            );
+
+            // Tworzenie katalogu kopii zapasowych, jeśli nie istnieje
+            Directory.CreateDirectory(backupDirectory);
+
+            // Tworzenie nazwy pliku kopii zapasowej z datą i czasem
+            var backupFileName = $"TimeTracker_backup_{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.db";
+            var backupPath = Path.Combine(backupDirectory, backupFileName);
+
+            // Kopiowanie pliku bazy danych
+            await Task.Run(() => File.Copy(dbPath, backupPath, true));
+
+            System.Diagnostics.Debug.WriteLine($"[DB] Utworzono kopię zapasową w: {backupPath}");
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[DB] Błąd podczas tworzenia kopii zapasowej: {ex.Message}");
+            throw;
+        }
+    }
+
+    public static async Task RestoreFromBackupAsync(string backupPath, string currentDbPath)
+    {
+        try
+        {
+            if (!File.Exists(backupPath))
+            {
+                throw new FileNotFoundException("Nie znaleziono pliku kopii zapasowej", backupPath);
+            }
+
+            // Zatrzymujemy wszystkie połączenia z bazą danych
+            using (var fs = File.Open(currentDbPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+            {
+                fs.Close();
+            }
+
+            // Przywracamy kopię zapasową
+            await Task.Run(() => File.Copy(backupPath, currentDbPath, true));
+
+            System.Diagnostics.Debug.WriteLine($"[DB] Przywrócono bazę danych z kopii: {backupPath}");
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[DB] Błąd podczas przywracania kopii zapasowej: {ex.Message}");
+            throw;
+        }
+    }
+
+    public static string[] GetAvailableBackups(string dbPath)
+    {
+        var backupDirectory = Path.Combine(
+            Path.GetDirectoryName(dbPath)!,
+            "Backups"
+        );
+
+        if (!Directory.Exists(backupDirectory))
+        {
+            return Array.Empty<string>();
+        }
+
+        return Directory.GetFiles(backupDirectory, "TimeTracker_backup_*.db")
+                       .OrderByDescending(f => f)
+                       .ToArray();
+    }
 } 

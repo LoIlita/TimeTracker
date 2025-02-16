@@ -12,6 +12,7 @@ using Microsoft.Maui.ApplicationModel;
 using System.Diagnostics;
 using TimeTracker.UI.Views;
 using Application = Microsoft.Maui.Controls.Application;
+using TimeTracker.Infrastructure.Data;
 
 namespace TimeTracker.UI.ViewModels;
 
@@ -43,6 +44,7 @@ public partial class WorkTrackerViewModel : ObservableObject, IDisposable
     private ObservableCollection<WorkSessionDto> _recentSessions = new();
     private ObservableCollection<SessionGroup> _filteredSessions = new();
     private ObservableCollection<string> _availableHashtags = new();
+    private readonly string _dbPath;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanStart))]
@@ -96,6 +98,11 @@ public partial class WorkTrackerViewModel : ObservableObject, IDisposable
         _logger = logger;
         _dialogService = dialogService;
         _serviceProvider = serviceProvider;
+
+        _dbPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "TimeTracker.db"
+        );
 
         _timerService.TimerTick += OnTimerTick;
 
@@ -573,6 +580,33 @@ public partial class WorkTrackerViewModel : ObservableObject, IDisposable
         {
             _logger.LogError(ex, "Błąd podczas przechodzenia do widoku statystyk");
             await ShowAlertAsync("Błąd", "Nie udało się otworzyć statystyk");
+        }
+    }
+
+    [RelayCommand]
+    private async Task CreateBackup()
+    {
+        try
+        {
+            await DbConfiguration.CreateBackupAsync(_dbPath);
+            var backups = DbConfiguration.GetAvailableBackups(_dbPath);
+            var lastBackup = backups.FirstOrDefault();
+            
+            if (lastBackup != null)
+            {
+                await _dialogService.ShowInfoAsync(
+                    "Kopia zapasowa", 
+                    $"Utworzono kopię zapasową w:\n{lastBackup}"
+                );
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Błąd podczas tworzenia kopii zapasowej");
+            await _dialogService.ShowErrorAsync(
+                "Błąd", 
+                "Nie udało się utworzyć kopii zapasowej bazy danych."
+            );
         }
     }
 }

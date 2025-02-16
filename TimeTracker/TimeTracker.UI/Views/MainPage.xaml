@@ -16,6 +16,7 @@
         <HorizontalStackLayout Grid.Row="0" Spacing="10" Margin="10">
             <Button Text="Historia" Command="{Binding ShowHistoryCommand}"/>
             <Button Text="Statystyki" Command="{Binding ShowStatisticsCommand}"/>
+            <Button Text="Kopia zapasowa" Command="{Binding CreateBackupCommand}"/>
         </HorizontalStackLayout>
 
         <!-- Główna zawartość -->
@@ -27,14 +28,12 @@
                     <Label Text="Czas trwania:"
                            SemanticProperties.HeadingLevel="Level1"
                            FontSize="32"
-                           HorizontalOptions="Center"
-                           TextColor="{StaticResource TextSecondary}" />
+                           HorizontalOptions="Center" />
 
                     <Label Text="{Binding TimerDisplay}"
                            SemanticProperties.HeadingLevel="Level2"
                            FontSize="48"
-                           HorizontalOptions="Center"
-                           TextColor="{StaticResource White}" />
+                           HorizontalOptions="Center" />
 
                     <!-- Przyciski kontroli timera -->
                     <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
