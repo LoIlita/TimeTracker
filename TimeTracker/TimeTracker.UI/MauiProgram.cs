@@ -95,6 +95,7 @@ public static class MauiProgram
 			// Serwisy UI
 			builder.Services.AddSingleton<ITimerService, TimerService>();
 			builder.Services.AddSingleton<IDialogService, DialogService>();
+			builder.Services.AddSingleton<IUpdateService, GitHubUpdateService>();
 			
 			// Rejestracja serwisów dla predefiniowanych sesji
 			builder.Services.AddScoped<IPredefinedSessionRepository, PredefinedSessionRepository>();

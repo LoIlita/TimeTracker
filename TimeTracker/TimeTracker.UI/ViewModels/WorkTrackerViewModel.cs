@@ -11,7 +11,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Maui.ApplicationModel;
 using System.Diagnostics;
 using TimeTracker.UI.Views;
-using Application = Microsoft.Maui.Controls.Application;
 using TimeTracker.Infrastructure.Data;
 
 namespace TimeTracker.UI.ViewModels;
@@ -34,6 +33,7 @@ public partial class WorkTrackerViewModel : ObservableObject, IDisposable
     private readonly ILogger<WorkTrackerViewModel> _logger;
     private readonly IDialogService _dialogService;
     private readonly IServiceProvider _serviceProvider;
+    private readonly IUpdateService _updateService;
     private TimeSpan _currentDuration;
     private TimeSpan _pausedDuration;
     private string _timerDisplay = "00:00:00";
@@ -90,7 +90,8 @@ public partial class WorkTrackerViewModel : ObservableObject, IDisposable
         ITimerService timerService,
         ILogger<WorkTrackerViewModel> logger,
         IDialogService dialogService,
-        IServiceProvider serviceProvider)
+        IServiceProvider serviceProvider,
+        IUpdateService updateService)
     {
         _sessionReader = sessionReader;
         _sessionWriter = sessionWriter;
@@ -98,6 +99,7 @@ public partial class WorkTrackerViewModel : ObservableObject, IDisposable
         _logger = logger;
         _dialogService = dialogService;
         _serviceProvider = serviceProvider;
+        _updateService = updateService;
 
         _dbPath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
@@ -107,6 +109,7 @@ public partial class WorkTrackerViewModel : ObservableObject, IDisposable
         _timerService.TimerTick += OnTimerTick;
 
         InitializeAsync().ConfigureAwait(false);
+        CheckForUpdatesAsync().ConfigureAwait(false);
     }
 
     private async Task InitializeAsync()
@@ -122,6 +125,78 @@ public partial class WorkTrackerViewModel : ObservableObject, IDisposable
             _logger.LogError(ex, "Błąd podczas inicjalizacji");
             await ShowAlertAsync("Błąd", "Wystąpił błąd podczas inicjalizacji aplikacji.");
         }
+    }
+
+    private async Task CheckForUpdatesAsync()
+    {
+        try
+        {
+            _logger.LogInformation("Sprawdzanie dostępności aktualizacji...");
+            var updateInfo = await _updateService.CheckForUpdatesAsync();
+            
+            if (updateInfo != null)
+            {
+                var message = $"Dostępna jest nowa wersja {updateInfo.Version}\n\n{updateInfo.ReleaseNotes}";
+                var title = updateInfo.IsRequired ? "Wymagana Aktualizacja" : "Dostępna Aktualizacja";
+                
+                if (await _dialogService.ShowConfirmationAsync(title, message + "\n\nCzy chcesz zainstalować teraz?"))
+                {
+                    await InstallUpdateAsync(updateInfo);
+                }
+                else if (updateInfo.IsRequired)
+                {
+                    _logger.LogWarning("Użytkownik odrzucił wymaganą aktualizację. Zamykanie aplikacji...");
+                    Microsoft.Maui.Controls.Application.Current.Quit();
+                }
+            }
+            else
+            {
+                _logger.LogInformation("Brak dostępnych aktualizacji");
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Błąd podczas sprawdzania aktualizacji");
+        }
+    }
+
+    private async Task InstallUpdateAsync(UpdateInfo updateInfo)
+    {
+        try
+        {
+            _logger.LogInformation("Rozpoczynanie instalacji aktualizacji {Version}", updateInfo.Version);
+            var success = await _updateService.DownloadAndInstallUpdateAsync(updateInfo);
+            
+            if (success)
+            {
+                await _dialogService.ShowInfoAsync(
+                    "Aktualizacja", 
+                    "Aktualizacja została pobrana. Aplikacja zostanie uruchomiona ponownie."
+                );
+                Microsoft.Maui.Controls.Application.Current.Quit();
+            }
+            else
+            {
+                await _dialogService.ShowErrorAsync(
+                    "Błąd", 
+                    "Nie udało się zainstalować aktualizacji."
+                );
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Błąd podczas instalowania aktualizacji");
+            await _dialogService.ShowErrorAsync(
+                "Błąd",
+                "Wystąpił błąd podczas instalowania aktualizacji."
+            );
+        }
+    }
+
+    [RelayCommand]
+    private async Task CheckForUpdates()
+    {
+        await CheckForUpdatesAsync();
     }
 
     private async Task UpdateAvailableHashtags()
