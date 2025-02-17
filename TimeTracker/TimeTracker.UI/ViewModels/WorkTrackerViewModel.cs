@@ -146,7 +146,15 @@ public partial class WorkTrackerViewModel : ObservableObject, IDisposable
                 else if (updateInfo.IsRequired)
                 {
                     _logger.LogWarning("Użytkownik odrzucił wymaganą aktualizację. Zamykanie aplikacji...");
-                    Microsoft.Maui.Controls.Application.Current.Quit();
+                    if (Microsoft.Maui.Controls.Application.Current != null)
+                    {
+                        Microsoft.Maui.Controls.Application.Current.Quit();
+                    }
+                    else
+                    {
+                        _logger.LogError("Nie można zamknąć aplikacji - Application.Current jest null");
+                        Environment.Exit(0);
+                    }
                 }
             }
             else
@@ -173,7 +181,15 @@ public partial class WorkTrackerViewModel : ObservableObject, IDisposable
                     "Aktualizacja", 
                     "Aktualizacja została pobrana. Aplikacja zostanie uruchomiona ponownie."
                 );
-                Microsoft.Maui.Controls.Application.Current.Quit();
+                if (Microsoft.Maui.Controls.Application.Current != null)
+                {
+                    Microsoft.Maui.Controls.Application.Current.Quit();
+                }
+                else
+                {
+                    _logger.LogError("Nie można zamknąć aplikacji - Application.Current jest null");
+                    Environment.Exit(0);
+                }
             }
             else
             {

@@ -28,11 +28,13 @@
                     <Label Text="Czas trwania:"
                            SemanticProperties.HeadingLevel="Level1"
                            FontSize="32"
+                           TextColor="White"
                            HorizontalOptions="Center" />
 
                     <Label Text="{Binding TimerDisplay}"
                            SemanticProperties.HeadingLevel="Level2"
                            FontSize="48"
+                           TextColor="White"
                            HorizontalOptions="Center" />
 
                     <!-- Przyciski kontroli timera -->
