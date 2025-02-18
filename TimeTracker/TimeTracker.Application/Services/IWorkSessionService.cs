@@ -22,4 +22,5 @@ public interface IWorkSessionService : IWorkSessionReader, IWorkSessionWriter
     Task<WorkSessionDto> GetByIdAsync(Guid id);
     Task<IEnumerable<WorkSessionDto>> GetSessionsByDateRangeAsync(DateTime start, DateTime end);
     Task<WorkSessionDto> UpdateSessionAsync(Guid id, UpdateWorkSessionDto dto);
+    Task DeleteSessionAsync(Guid id);
 } 

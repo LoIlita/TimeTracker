@@ -145,4 +145,27 @@ public class WorkSessionService : IWorkSessionService
 
         return _mapper.Map<WorkSessionDto>(session);
     }
+
+    public async Task DeleteSessionAsync(Guid id)
+    {
+        try
+        {
+            var session = await _repository.GetByIdAsync(id);
+            if (session == null)
+            {
+                throw new KeyNotFoundException($"Nie znaleziono sesji o ID: {id}");
+            }
+
+            if (session.IsActive)
+            {
+                throw new InvalidOperationException("Nie można usunąć aktywnej sesji.");
+            }
+
+            await _repository.DeleteAsync(id);
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException($"Błąd podczas usuwania sesji: {ex.Message}", ex);
+        }
+    }
 } 

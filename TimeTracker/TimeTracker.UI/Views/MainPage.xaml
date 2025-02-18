@@ -28,13 +28,13 @@
                     <Label Text="Czas trwania:"
                            SemanticProperties.HeadingLevel="Level1"
                            FontSize="32"
-                           TextColor="White"
+                           TextColor="#E6E6E6"
                            HorizontalOptions="Center" />
 
                     <Label Text="{Binding TimerDisplay}"
                            SemanticProperties.HeadingLevel="Level2"
                            FontSize="48"
-                           TextColor="White"
+                           TextColor="#E6E6E6"
                            HorizontalOptions="Center" />
 
                     <!-- Przyciski kontroli timera -->
@@ -105,6 +105,54 @@
                         </FlexLayout>
                     </VerticalStackLayout>
                 </VerticalStackLayout>
+
+                <!-- Lista sesji z przyciskami usuwania -->
+                <Label Text="Dzisiejsze sesje"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="#E6E6E6"
+                       Margin="0,20,0,10"/>
+                       
+                <CollectionView ItemsSource="{Binding RecentSessions}"
+                              EmptyView="Brak sesji na dziś">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:WorkSessionDto">
+                            <Frame Margin="0,5" Padding="10">
+                                <Grid ColumnDefinitions="*, Auto, Auto, Auto">
+                                    <!-- Nazwa sesji -->
+                                    <Label Grid.Column="0" 
+                                           Text="{Binding Description}" 
+                                           FontAttributes="Bold"
+                                           TextColor="Black"/>
+                                    
+                                    <!-- Hashtagi -->
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Tags}"
+                                           TextColor="Black"
+                                           Margin="10,0"/>
+                                    
+                                    <!-- Czas trwania -->
+                                    <Label Grid.Column="2" 
+                                           Text="{Binding Duration, StringFormat='{0:hh\\:mm\\:ss}'}"
+                                           TextColor="Black"
+                                           FontAttributes="Bold"
+                                           Margin="0,0,10,0"/>
+
+                                    <!-- Przycisk usuwania -->
+                                    <Button Grid.Column="3" 
+                                            Text="Usuń"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:WorkTrackerViewModel}}, Path=DeleteSessionCommand}"
+                                            CommandParameter="{Binding}"
+                                            BackgroundColor="Red"
+                                            TextColor="White"
+                                            HeightRequest="35"
+                                            WidthRequest="50"
+                                            FontSize="12"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
             </VerticalStackLayout>
         </ScrollView>

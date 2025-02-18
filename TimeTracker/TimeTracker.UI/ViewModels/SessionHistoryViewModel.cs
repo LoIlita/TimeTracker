@@ -12,6 +12,7 @@ namespace TimeTracker.UI.ViewModels;
 public partial class SessionHistoryViewModel : ObservableObject
 {
     private readonly IWorkSessionReader _sessionReader;
+    private readonly IWorkSessionService _sessionService;
     private readonly ILogger<SessionHistoryViewModel> _logger;
     private readonly IDialogService _dialogService;
     private ObservableCollection<WorkTrackerViewModel.SessionGroup> _sessions = new();
@@ -37,10 +38,12 @@ public partial class SessionHistoryViewModel : ObservableObject
 
     public SessionHistoryViewModel(
         IWorkSessionReader sessionReader,
+        IWorkSessionService sessionService,
         ILogger<SessionHistoryViewModel> logger,
         IDialogService dialogService)
     {
         _sessionReader = sessionReader;
+        _sessionService = sessionService;
         _logger = logger;
         _dialogService = dialogService;
 
@@ -158,5 +161,30 @@ public partial class SessionHistoryViewModel : ObservableObject
     {
         _logger.LogInformation("Wybrano hashtag: {Hashtag}", hashtag);
         SelectedHashtag = hashtag;
+    }
+
+    [RelayCommand]
+    private async Task DeleteSession(WorkSessionDto session)
+    {
+        try
+        {
+            if (session == null) return;
+
+            var result = await _dialogService.ShowConfirmationAsync(
+                "Usuwanie sesji",
+                "Czy na pewno chcesz usunąć tę sesję?");
+
+            if (!result) return;
+
+            await _sessionService.DeleteSessionAsync(session.Id);
+            await LoadHistoryAsync();
+            
+            _logger.LogInformation("Sesja została usunięta pomyślnie");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Błąd podczas usuwania sesji");
+            await _dialogService.ShowErrorAsync("Błąd", "Nie udało się usunąć sesji");
+        }
     }
 } 

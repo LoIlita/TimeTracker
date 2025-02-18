@@ -87,4 +87,23 @@ public class WorkSessionRepository : IWorkSessionRepository
         
         System.Diagnostics.Debug.WriteLine("[WorkSessionRepository] UpdateAsync - Zmiany zapisane w bazie danych");
     }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        try
+        {
+            _logger.LogInformation("Usuwanie sesji o ID: {Id}", id);
+            var session = await GetByIdAsync(id);
+            
+            _context.WorkSessions.Remove(session);
+            await _context.SaveChangesAsync();
+            
+            _logger.LogInformation("Sesja została usunięta pomyślnie");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Błąd podczas usuwania sesji o ID: {Id}", id);
+            throw;
+        }
+    }
 } 

@@ -13,4 +13,5 @@ public interface IWorkSessionRepository
     Task AddAsync(WorkSession session);
     Task UpdateAsync(WorkSession session);
     Task<IEnumerable<WorkSession>> GetSessionsByDateRangeAsync(DateTime start, DateTime end);
+    Task DeleteAsync(Guid id);
 } 

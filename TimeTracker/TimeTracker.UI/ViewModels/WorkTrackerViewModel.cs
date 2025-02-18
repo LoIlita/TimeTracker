@@ -616,7 +616,7 @@ public partial class WorkTrackerViewModel : ObservableObject, IDisposable
                 Tags += " " + value;
             }
             // Wyczyść wybór
-            SelectedHashtag = null;
+          //  SelectedHashtag = null;
         }
         UpdateFilteredSessions().ConfigureAwait(false);
     }
@@ -698,6 +698,32 @@ public partial class WorkTrackerViewModel : ObservableObject, IDisposable
                 "Błąd", 
                 "Nie udało się utworzyć kopii zapasowej bazy danych."
             );
+        }
+    }
+
+    [RelayCommand]
+    private async Task DeleteSession(WorkSessionDto session)
+    {
+        try
+        {
+            if (session == null) return;
+
+            var result = await _dialogService.ShowConfirmationAsync(
+                "Usuwanie sesji",
+                "Czy na pewno chcesz usunąć tę sesję?");
+
+            if (!result) return;
+
+            await (_sessionWriter as IWorkSessionService)!.DeleteSessionAsync(session.Id);
+            await LoadRecentSessionsAsync();
+            await UpdateAvailableHashtags();
+            
+            _logger.LogInformation("Sesja została usunięta pomyślnie");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Błąd podczas usuwania sesji");
+            await _dialogService.ShowErrorAsync("Błąd", "Nie udało się usunąć sesji");
         }
     }
 }

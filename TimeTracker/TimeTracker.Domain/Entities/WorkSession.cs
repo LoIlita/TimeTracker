@@ -55,10 +55,7 @@ public class WorkSession
         Description = description ?? throw new ArgumentNullException(nameof(description));
     }
 
-    public virtual void UpdateTags(string tags)
-    {
-        Tags = tags ?? string.Empty;
-    }
+  
 
     public virtual void UpdateTimes(DateTime startTime, DateTime? endTime)
     {

@@ -65,6 +65,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\TimeTracker.Application\TimeTracker.Application.csproj" />
+		<ProjectReference Include="..\TimeTracker.Domain\TimeTracker.Domain.csproj" />
 		<ProjectReference Include="..\TimeTracker.Infrastructure\TimeTracker.Infrastructure.csproj" />
 	</ItemGroup>
 
